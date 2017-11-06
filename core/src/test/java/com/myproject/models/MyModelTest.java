@@ -28,16 +28,13 @@ public class MyModelTest {
     @Mock
     private SlingHttpServletRequest request;
 
-    @Mock
-    AemObjectAnnotationProcessorFactory factory;
-
-    @InjectMocks
-    AemObjectInjector aemObjectInjector;
 
     private static final String RESOURCE_PATH = "/content/parent-page/jcr:content/content/renderer";
     private static final String PAGE_PATH = "/content/parent-page";
 
     private MyModel mymodel;
+    private AemObjectInjector aemObjectInjector;
+    private AemObjectAnnotationProcessorFactory factory;
 
     @Before
     public final void setUp() throws Exception {
@@ -45,7 +42,8 @@ public class MyModelTest {
         Resource pageResource = context.resourceResolver().getResource(PAGE_PATH);
         Page page = pageResource.adaptTo(Page.class);
         context.currentPage(page);
-
+        aemObjectInjector = new AemObjectInjector();
+        factory = new AemObjectAnnotationProcessorFactory();
         context.load().json("/models/MyModel.json", RESOURCE_PATH);
         context.registerInjectActivateService(factory);
         context.registerService(AemObjectInjector.class, aemObjectInjector);
